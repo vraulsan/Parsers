@@ -1,5 +1,9 @@
-#### This is my first project, I will try to develop a script to facilitate
-#### our job during Spectrum analysis, specifically when observing Sumitomo ONUs.
+###########################################################################################
+###########################################################################################
+####    This is my first project, I will try to develop a script to facilitate    #########
+#### our job during Spectrum analysis, specifically when observing Sumitomo ONUs. #########
+###########################################################################################
+###########################################################################################
 
 # Importing libraries that we will might need
 import time
