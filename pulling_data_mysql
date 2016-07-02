@@ -1,0 +1,39 @@
+import MySQLdb
+
+######################### Lets build our Class ################################
+
+class Database:
+    host = "52.20.131.2"
+    user = "root"
+    passwd = "kornkid182"
+    db = "fireprotocol"
+    
+    # build the constructor
+    # argument "self" refers to the current instance of the class
+    def __init__(self):
+        self.connection = MySQLdb.connect(host = self.host,
+                                            user = self.user,
+                                            passwd = self.passwd,
+                                            db = self.db)
+    # define the query function
+    def query(self, q):
+        # create a cursor to query the records in the database
+        cursor = self.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(q)
+        # return all results from the query
+        return cursor.fetchall()
+    # and then close the connection with this other function
+    def __del__(self):
+        self.connection.close()
+        
+########################## End of the Class ###################################
+if __name__ == "__main__":
+    db = Database()
+
+q = """
+SELECT * FROM scripts
+LIMIT 0 , 30
+"""
+showall = db.query(q)
+
+print showall
