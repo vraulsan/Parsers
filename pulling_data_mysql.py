@@ -68,8 +68,10 @@ search = db.query(str(q))
 
 # use for loop to print out values for each position of the table
 for entry in search:
-        print "Found: %s" % entry['Name'],
-        print "at %s" % entry['Address'], 
-        print "using %s" % entry['Vendor'],
-        print "in %s" % entry['City'],
-        print "with Mgmt IP of %s" % entry['Mgmt IP']
+        print "----------------------------------------------------"
+        print "%s" % entry['Name'],
+        print "\n\tAddress: %s" % entry['Address'], 
+        print "\n\tVendor: %s" % entry['Vendor'],
+        print "\n\tCity: %s" % entry['City'],
+        print "\n\tMgmt IP: %s" % entry['Mgmt IP']
+        print "----------------------------------------------------"
