@@ -33,7 +33,7 @@ if __name__ == "__main__":
 #define function for when searching by city
 def bycity(what_city):
     what_city = raw_input("Search by city: ")
-    q = "SELECT * FROM  `customers` WHERE `City` LIKE " + " \'" + what_city + "\' " + " LIMIT 0 , 30"
+    q = "SELECT * FROM  `customers` WHERE `City` REGEXP " + " \'" + what_city + "\' " + " LIMIT 0 , 30"
     search = db.query(q)
     for entry in search:
         print "Found %s" % entry['Name'] ,
