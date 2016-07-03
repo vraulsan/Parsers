@@ -8,9 +8,9 @@ import MySQLdb
 ######################### Lets build our Class ################################
 
 class Database:
-    host = "52.20.131.2"
+    host = "hostname/ip"
     user = "ubuntu-vm"
-    passwd = "kornkid182"
+    passwd = "pass"
     db = "fireprotocol"
     
     # build the constructor
