@@ -30,15 +30,9 @@ class Database:
 if __name__ == "__main__":
     db = Database()
 
-#q = """
-#SELECT * FROM customers
-#LIMIT 0 , 30
-#"""
-#search = db.query(q)
-
-#searchby = raw_input("What do you want to search by: ")
-
+#define function for when searching by city
 def bycity(what_city):
+    what_city = raw_input("Search by city: ")
     q = "SELECT * FROM  `customers` WHERE `City` LIKE " + " \'" + what_city + "\' " + " LIMIT 0 , 30"
     search = db.query(q)
     for entry in search:
@@ -46,7 +40,3 @@ def bycity(what_city):
         print "in %s" % entry['City'] , 
         print ", with Mgmt IP of %s" % entry['Mgmt IP']
 
-
-what_city = raw_input("Search by city: ")
-
-bycity(what_city)
