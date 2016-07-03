@@ -4,7 +4,7 @@ import MySQLdb
 
 class Database:
     host = "52.20.131.2"
-    user = "root"
+    user = "ubuntu-vm"
     passwd = "kornkid182"
     db = "fireprotocol"
     
@@ -30,10 +30,23 @@ class Database:
 if __name__ == "__main__":
     db = Database()
 
-q = """
-SELECT * FROM scripts
-LIMIT 0 , 30
-"""
-showall = db.query(q)
+#q = """
+#SELECT * FROM customers
+#LIMIT 0 , 30
+#"""
+#search = db.query(q)
 
-print showall
+#searchby = raw_input("What do you want to search by: ")
+
+def bycity(what_city):
+    q = "SELECT * FROM  `customers` WHERE `City` LIKE " + " \'" + what_city + "\' " + " LIMIT 0 , 30"
+    search = db.query(q)
+    for entry in search:
+        print "Found %s" % entry['Name'] ,
+        print "in %s" % entry['City'] , 
+        print ", with Mgmt IP of %s" % entry['Mgmt IP']
+
+
+what_city = raw_input("Search by city: ")
+
+bycity(what_city)
