@@ -66,12 +66,16 @@ q = ("SELECT * FROM  `customers` WHERE `%s` REGEXP \'%s\' LIMIT 0 , 30" % (bywha
 # store the query output in variable named search
 search = db.query(str(q))
 
+i = 0
 # use for loop to print out values for each position of the table
 for entry in search:
         print "----------------------------------------------------"
+        i += 1
+        print "%d. " % i,
         print "%s" % entry['Name'],
         print "\n\tAddress: %s" % entry['Address'], 
         print "\n\tVendor: %s" % entry['Vendor'],
         print "\n\tCity: %s" % entry['City'],
         print "\n\tMgmt IP: %s" % entry['Mgmt IP']
         print "----------------------------------------------------"
+
