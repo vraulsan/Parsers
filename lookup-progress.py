@@ -5,13 +5,18 @@
 
 import MySQLdb
 import re
-
+import time
+import paramiko
+import sys
+import os
+import glob
+import getpass
 ######################### Lets build our Class ################################
 
 class Database:
     host = "hostname/ip"
     user = "ubuntu-vm"
-    passwd = "passwd"
+    passwd = "passw"
     db = "fireprotocol"
     
     # build the constructor
@@ -114,3 +119,53 @@ option = input("""
 	\t5. Logging
 	\t6. Version/Uptime information
 	Please enter an option from above: """)
+
+if option == 1:
+    option = "show run"
+elif option == 2:
+    option = "show interface status"
+elif option == 3:
+    option = "show ip interface brief"
+elif option == 4:
+    option = "show ip ospf nei"
+elif option == 5:
+    option = "show logg"
+elif option == 6:
+    option = "show version"
+else:
+    print "Wrong input, ending program... for now"
+
+###### define the paramiko ssh connection function #######
+def open_ssh_conn(hostname, usern, passw, command):
+    try:
+        # establish session and pass to variable called session
+        session = paramiko.SSHClient()
+        # auto-accept unknown_hosts 
+        session.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        # pass credentials to connect function
+        session.connect(hostname, username = usern, password = passw)
+        # this is a dynamic connection to the host
+        #time.sleep(1)
+        connection = session.invoke_shell()
+        #time.sleep(1)
+        connection.send("term len 0\n")
+        connection.send("%s\n" % command)
+        time.sleep(1)
+        
+        # take the output from the device and pass it to variable cpr_output
+        output = connection.recv(65535)
+       
+        # here we print the device output to the screen
+        print output + "\n"
+    except paramiko.AuthenticationException:
+        print "Something went wrong during authentication, check username and password"        
+        # and we close the session
+        session.close()
+    except:
+        print "Cant find that Sumi Chassis, try again."
+
+#creds = "creds"
+usern = "username"
+passw = "passw"
+
+open_ssh_conn(myip, usern, passw, option)
