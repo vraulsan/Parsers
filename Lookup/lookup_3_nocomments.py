@@ -40,14 +40,24 @@ if __name__ == "__main__":
 
 ################# searching function #######################
 def search_func():
-    bywhat = input("""
+    msg = """
 What do you want to search by:
     \t1. Search by Name
     \t2. Search by Address
     \t3. Search by City
     \t4. Search by Vendor
 
-Enter the number you want to search by: """)
+Enter the number you want to search by: """
+    while True:
+        try:
+            bywhat = int(raw_input(msg))
+        except ValueError:
+            continue
+        else:
+            if bywhat < 1 or bywhat > 7:
+                continue
+            else:
+                break
     if bywhat == 1:
         bywhat = "Name"
     elif bywhat == 2:
@@ -56,9 +66,6 @@ Enter the number you want to search by: """)
         bywhat = "City"
     elif bywhat == 4:
         bywhat = "Vendor"
-    else: 
-        print "Wrong input, try again."
-        exit()
 
     what = raw_input("Search by %s: " % bywhat)
     q = ("SELECT * FROM  `customers` WHERE `%s` REGEXP \'%s\' LIMIT 0 , 30" % (bywhat, what))
@@ -201,3 +208,4 @@ while True:
                 third = des_comm()
                 if third == 0:
                     break
+              
