@@ -105,7 +105,7 @@ def the_IP(search_IP):
 
 ############## ask user desired command function ###########
 def des_comm():
-    comm_opt = input("""
+    msg = """
 If you would like to run a command, please enter the number:
 \t1. Running configuration
 \t2. Interfaces status
@@ -115,13 +115,23 @@ If you would like to run a command, please enter the number:
 \t6. Version/Uptime information
 \t7. Enter a custom command
 
-Otherwise, enter 0 to query the database again.""")
+Otherwise, enter 0 to query the database again: """
+    while True:
+        try:
+            comm_opt = int(raw_input(msg))
+        except ValueError:
+            continue
+        else:
+            if comm_opt < 0 or comm_opt > 7:
+                continue
+            else:
+                break
     if comm_opt == 1:
         comm_opt = "show runn"
     elif comm_opt == 2:
         comm_opt = "show inter status"
     elif comm_opt == 3:
-        comm_opt = "show ip inter brief"
+           comm_opt = "show ip inter brief"
     elif comm_opt == 4:
         comm_opt = "show ip ospf nei"
     elif comm_opt == 5:
@@ -191,4 +201,3 @@ while True:
                 third = des_comm()
                 if third == 0:
                     break
-              
