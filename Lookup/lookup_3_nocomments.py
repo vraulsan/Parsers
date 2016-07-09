@@ -96,7 +96,17 @@ Enter the number you want to search by: """
     return search_IP
 ################################################################
 def the_IP(search_IP):
-    i = input("\nIf you would like to get an output from the box, enter the number for that box now.\nOtherwise, enter 0 to search again: ")
+    msg = "If you would like to get an output from the box, enter the number for that box now.\nOtherwise, enter 0 to search again: "
+    while True:
+        try:
+            i = int(raw_input(msg))
+        except ValueError:
+            continue
+        else:
+            if i < 0 or i > len(search_IP):
+                continue
+            else:
+                break
     if i == 0:
         return i
     else: 
