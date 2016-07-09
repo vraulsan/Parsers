@@ -6,14 +6,18 @@ import sys
 import os
 import glob
 import getpass
+import platform, os, subprocess
+import log
 
 
 ######### define database class ###############
 class Database:
-    host = "ip/hostname"
-    user = "ubuntu-vm"
-    passwd = "passw"
-    db = "fireprotocol"
+    # read the lines of a file called dbconfig.txt which holds the database information
+    dbfile = open("dbconfig.txt")
+    host = dbfile.readline()[0:-1] # avoid reading the \n at the end of each line of dbconfig.txt
+    user = dbfile.readline()[0:-1]
+    passwd = dbfile.readline()[0:-1]
+    db = dbfile.readline()[0:-1]
     def __init__(self):
         self.connection = MySQLdb.connect(host = self.host,
                                             user = self.user,
@@ -42,7 +46,8 @@ What do you want to search by:
     \t2. Search by Address
     \t3. Search by City
     \t4. Search by Vendor
-    """)
+
+Enter the number you want to search by: """)
     if bywhat == 1:
         bywhat = "Name"
     elif bywhat == 2:
@@ -69,7 +74,16 @@ What do you want to search by:
             print "\n\tAddress: %s" % entry['Address'], 
             print "\n\tVendor: %s" % entry['Vendor'],
             print "\n\tCity: %s" % entry['City'],
-            print "\n\tMgmt IP: %s" % entry['Mgmt IP']
+            print "\n\tMgmt IP: %s" % entry['Mgmt IP'],
+            status = subprocess.call(
+                ['ping', '-c1', '-W10', '-w1', entry['Mgmt IP']],
+                stdout = open(os.devnull, 'wb'))
+            if status == 0:
+                print "is", 
+                log.infog("UP")
+            else:
+                print "is",
+                log.err("DOWN")
             print "----------------------------------------------------"
     search_IP = list(db.query(str(qIP)))
     return search_IP
@@ -143,10 +157,24 @@ def ssh_conn(fhostname, fusern, fpassw, des_comm):
 
 
 
-username = "login"
-passw = "passw"
+panti = "panti"
+kornkid182 = "kornkid182"
 
 
+print "####################################################################"
+print "#                                                                  #"
+print "#                       Lookup Ver 3.0 beta                        #"
+print "#                                                                  #"
+print "#                                                                  #"
+print "#                   Developed by Victor Sanchez                    #"
+print "#                                                                  #"
+print "#                                                                  #"
+print "#                                                                  #"
+print "#            Press CTRL-C at any time to stop the script           #"
+print "####################################################################"
+
+sshlogin = raw_input("Give me your SSH username: ")
+sshpass = getpass.getpass("Give me your SSH password: ")
 
 while True:
     first = search_func()
@@ -159,7 +187,8 @@ while True:
             pass
         else:
             while True:
-                fourth = ssh_conn(second, username, passw, third)
+                fourth = ssh_conn(second, sshlogin, sshpass, third)
                 third = des_comm()
                 if third == 0:
                     break
+              
