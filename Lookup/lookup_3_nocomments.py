@@ -9,6 +9,19 @@ import getpass
 import platform, os, subprocess
 import log
 
+###########################################################
+def check_input(mini, maxi, msg):
+    while True:
+            try:
+                vari = int(raw_input(msg))
+            except ValueError:
+                continue
+            else:
+                if vari < mini or vari > maxi:
+                    continue
+                else:
+                    break
+    return vari
 
 ######### define database class ###############
 class Database:
@@ -48,16 +61,8 @@ What do you want to search by:
     \t4. Search by Vendor
 
 Enter the number you want to search by: """
-    while True:
-        try:
-            bywhat = int(raw_input(msg))
-        except ValueError:
-            continue
-        else:
-            if bywhat < 1 or bywhat > 7:
-                continue
-            else:
-                break
+    bywhat = check_input(1, 4, msg)
+
     if bywhat == 1:
         bywhat = "Name"
     elif bywhat == 2:
@@ -97,16 +102,7 @@ Enter the number you want to search by: """
 ################################################################
 def the_IP(search_IP):
     msg = "If you would like to get an output from the box, enter the number for that box now.\nOtherwise, enter 0 to search again: "
-    while True:
-        try:
-            i = int(raw_input(msg))
-        except ValueError:
-            continue
-        else:
-            if i < 0 or i > len(search_IP):
-                continue
-            else:
-                break
+    i = check_input(0, len(search_IP), msg)
     if i == 0:
         return i
     else: 
@@ -133,16 +129,8 @@ If you would like to run a command, please enter the number:
 \t7. Enter a custom command
 
 Otherwise, enter 0 to query the database again: """
-    while True:
-        try:
-            comm_opt = int(raw_input(msg))
-        except ValueError:
-            continue
-        else:
-            if comm_opt < 0 or comm_opt > 7:
-                continue
-            else:
-                break
+    comm_opt = check_input(0, 7, msg)
+    
     if comm_opt == 1:
         comm_opt = "show runn"
     elif comm_opt == 2:
@@ -184,8 +172,6 @@ def ssh_conn(fhostname, fusern, fpassw, des_comm):
 
 
 
-panti = "panti"
-kornkid182 = "kornkid182"
 
 
 print "####################################################################"
