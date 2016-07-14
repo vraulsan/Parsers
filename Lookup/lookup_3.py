@@ -21,6 +21,7 @@ import log
 # remember to add the elif condition for the new command you are adding.
 ####################
 
+
 # define function that we will use to force user's input
 def check_input(mini, maxi, msg):
     while True:
@@ -114,7 +115,7 @@ Enter the number you want to search by: """
             print "\n\tMgmt IP: %s" % entry['Mgmt IP'],
             # for each iteration, we will use subprocess to ping the 'Mgmt IP' element
             status = subprocess.call(
-                ['ping', '-c1', '-W10', '-w1', entry['Mgmt IP']],
+                ['ping', '-c1', '-W10', '-w2', entry['Mgmt IP']],
                 stdout = open(os.devnull, 'wb'))
             if status == 0:
                 print "is", 
@@ -209,16 +210,12 @@ def ssh_conn(fhostname, fusern, fpassw, des_comm):
         time.sleep(1)
         # store command's output in variable and then print it
         output = connection.recv(65535)
-        print output + "\n"
+        print str(log.info(output)) + "\n"
         session.close()
     # if failed to authenticate
     except paramiko.AuthenticationException:
         print "Something went wrong during authentication, check username and password"        
         session.close()
-    except:
-        # if failed to reach box
-        print "That box appears to be offline..."
-        pass
 
 ############# end of functions declaration ############
 
@@ -228,17 +225,20 @@ def ssh_conn(fhostname, fusern, fpassw, des_comm):
 
 
 # this is where program begins
-print "####################################################################"
-print "#                                                                  #"
-print "#                       Lookup Ver 3.0 beta                        #"
-print "#                                                                  #"
-print "#                                                                  #"
-print "#                   Developed by Victor Sanchez                    #"
-print "#                                                                  #"
-print "#                                                                  #"
-print "#                                                                  #"
-print "#            Press CTRL-C at any time to stop the script           #"
-print "####################################################################"
+splash = """
+ ######################################################################
+ ##                                                                  ##
+ ##                      Lookup Ver 3.0 beta                         ##
+ ##                                                                  ##
+ ##                                                                  ##
+ ##                   Developed by Victor Sanchez                    ##
+ ##                                                                  ##
+ ##                                                                  ##
+ ##                                                                  ##
+ ##            Press CTRL-C at any time to stop the script           ##
+ ######################################################################"""
+print (splash + "\n")
+
 
 # get users username and pass
 sshlogin = raw_input("Give me your SSH username: ")
