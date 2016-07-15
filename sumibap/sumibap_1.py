@@ -1,31 +1,42 @@
-import time
-import paramiko
-import re
-import sys
-import os
-import glob
-import getpass
+import sys, os, glob, getpass, paramiko, telnetlib, time
 
-class paraconn:
-	def __init__(self, hostname, usern, passw):
-		self.session = paramiko.SSHClient()
-		self.session.set_missin_host_key_policy(paramiko.AutoAddPolicy())
+def getSSHCredentials():
+	
+# define function to get hostname
+def getHostname():
+	while True:
+		try:
+			hostname = raw_input("Give me the hostname: ")
+		except ValueError:
+			continue
+		else:
+			break
+	if "CPR" or "cpr" in hostname:
+		connectTo = 1
+	elif "BAP" or "bap" in hostname:
+		connecTo = 2
+	return hostname, connectTo
 
-	def conn(self, hostname, usern, passw):
-		conn = self.session.connect (hostname, username = usern, password = passw)
-		conn = self.session.invoke_shell()
+###########################################################################
+# define function to telnet connect
+def connectTelnet(hostname, usern, passw):
+	port = 23
+	timeout = 3
+	connection = telnetlib.Telnet(hostname, port)
+	connection.read_until("Login:", timeout)
+	connection.write("tso\n")
+	connection.read_until("Password:", timeout)
+	connection.write("tso\n")
+	print "Welcome to %s, type in your commands or \"exit\" at any time." % hostname
+	return connection
 
-	def sendconn(self, comm):
-		self.conn.send(comm + "\n")
-		print self.conn.recv(65535)
-
-	def closeconn(self):
-		self.session.close()
-
-if __name == "__main__":
-	paraconn = paraconn()
-
-
-usern = raw_input("Give me username (we will only need this once): ")
-passw = getpass.getpass()
-
+# define function to interact with the BAPs
+def naviTelnet(connection):
+	while True:
+		command = raw_input("Command to run: ")
+		if "exit" in command or command == "exit":
+			connection.close()
+		else:
+			connection.write(command + "\n")
+			print connection.read_very_eager()
+#############################################################################
