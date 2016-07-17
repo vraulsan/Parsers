@@ -23,7 +23,6 @@ def getHostname():
 			# if BAP/bap is within hostname string, return
 			elif "BAP" in hostname or "bap" in hostname:
 				connectTo = 1                  # BAP's will use connectTo = 1
-				hostname = '192.168.0.1'
 				return hostname, connectTo
 				break
 			else:
