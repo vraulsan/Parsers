@@ -82,7 +82,7 @@ class connectSSH:
 	def ONUorCommandorBack(self, conn_established):
 		self.ONUorCommandorBack = raw_input("Paste your ONU, type command or exit: ")
 		if 'Slot' in self.ONUorCOmmandorBack or 'OLTPort' in self.ONUorCommandorBack:
-			self.onu = re.findall(r'\d+', self.ONUorCommand)
+			self.onu = re.findall(r'\d+', self.ONUorCommandorBack)
 			self.onu = "1/" + self.onu[0] + '/' + self.onu[1] + '/' + self.onu[2]
 			self.onu = """
 			set cli pagination off\n
@@ -96,7 +96,7 @@ class connectSSH:
 			return self.conn_terminated
 
 		else:
-			self.command = self.ONUorCommand
+			self.command = self.ONUorCommandorBack
 			self.command = """
 			set cli pagination off\n
 			%s\n""" % self.command
