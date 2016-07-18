@@ -52,6 +52,15 @@ def connectTelnet(hostname):
         output = connection.read_all()
         connection.close()
         print output
+    elif ':' in command:
+        showlog = "show logevent all -n 100"
+        connection.write(showlog + '\r\n')
+        connection.write('logout' + '\r\n')
+        output = connection.read_all()
+        connection.close()
+        for line in output.splitlines():
+            if command in line:
+                print line
     else:
         connection.write(command + '\r\n')
         connection.write('logout' + '\r\n')
