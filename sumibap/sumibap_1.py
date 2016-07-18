@@ -35,33 +35,23 @@ def connectTelnet(hostname):
 	connection = telnetlib.Telnet(hostname, port)
 	# wait until we get prompt to Login
 	connection.read_until("Login:", timeout)
-	connection.write("tso\n")
+	connection.write("tso\r\n")
 	# wait until we get prompt to Password
 	connection.read_until("Password:", timeout)
-	connection.write("tso\n")
+	connection.write("tso\r\n")
 	print "Welcome to %s, type in your commands or \"exit\" at any time." % hostname
 	command = raw_input("Command to run or exit: ")
-	if 'exi' in command or command == 'exit':
-		command = 'exit'	
-		return connection
+	if 'exi' in command:
+		command = 0
+		connection.close()
+		return command
 	else:
-		connection.write(command + '\n')
-		connection.write('log' + '\n')
-		print connection.read_all()
+		connection.write(command + '\r\n')
+		connection.write('logout' + '\r\n')
+		output = connection.read_all()
+		connection.close()
+		print output
 
-# define function to interact with the BAPs (NOT USING DUE TO TELNET ISSUES)
-#def naviTelnet(connection):
-	#while True:
-		#command = raw_input("Command to run or exit: ")
-		#if "exit" in command or command == "exit":
-			#connection.close()
-			#command = "exit"
-			#return command
-			#break
-		#else:
-			#connection.write(command + "\n")
-			#print connection.read_very_eager()
-			#continue
 #############################################################################
 
 # SSH connection class
@@ -72,16 +62,19 @@ class connectSSH:
 			self.session.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 			self.session.connect(hostname, username = usern, password = passw)
 			self.conn_established = self.session.invoke_shell()
-			return self.conn_established
-		except:
-			print "This is the hostname we are attempting %s" % hostname
-			print "Either you have wrong credentials or that CPR is unreachable"
+		except paramiko.AuthenticationException:
+			print "Authentication failed, please verify your crendetials..."
 			self.conn_failed = 0
 			return self.conn_failed
+		except:
+			print "Either that hostname is unreachable or something else failed, please try again..."
+			self.conn_failed = 1
+			return self.conn_failed
+		return self.conn_established
 
 	def ONUorCommandorBack(self, conn_established):
 		self.ONUorCommandorBack = raw_input("Paste your ONU, type command or exit: ")
-		if 'Slot' in self.ONUorCOmmandorBack or 'OLTPort' in self.ONUorCommandorBack:
+		if 'Slot' in self.ONUorCommandorBack or 'OLTPort' in self.ONUorCommandorBack:
 			self.onu = re.findall(r'\d+', self.ONUorCommandorBack)
 			self.onu = "1/" + self.onu[0] + '/' + self.onu[1] + '/' + self.onu[2]
 			self.onu = """
@@ -108,6 +101,18 @@ class connectSSH:
 		print self.conn_established.recv(65535)
 
 
+print "####################################################################"
+print "#                                                                  #"
+print "#                      SUMIBAP Ver 1.0 beta                        #"
+print "#                 (useful when doing Spectrum)                     #"
+print "#                                                                  #"
+print "#                  Developed by Victor Sanchez                     #"
+print "#                                                                  #"
+print "#                        for BHN ATS Team                          #"
+print "#                                                                  #"
+print "#            Press CTRL-C at any time to stop the script           #"
+print "####################################################################"
+
 
 usern, passw = getSSHCredentials()
 
@@ -117,17 +122,21 @@ while True:
 		while True:
 			session = connectSSH()
 			connect = session.sessionSSH(hostname, usern, passw)
+			if connect == 0:
+				usern, passw = getSSHCredentials()
+				break
+			elif connect == 1:
+				break
 			command = session.ONUorCommandorBack(connect)
 			if command == 0:
-					break
+				break
 			else:
 				session.outputSSH(connect, command)
 	elif connectTo == 1:
 		while True:
 			exitOrcommand = connectTelnet(hostname)
-			if exitOrcommand == 'exit':
+			if exitOrcommand == 0:
+				#print exitOrcommand
 				break
 			else:
 				continue
-		
-
