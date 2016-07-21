@@ -1,5 +1,0 @@
-Need to fix the following:
-
-1. Backspace not working on access server
-2. Ommit the spaces when reading the hostname
-3. Add logo on splash screen

@@ -1,0 +1,4 @@
+Version 1:
+
+  . Sending blank spaces before/after/between hostname will not cause an issue.
+  . Added BHN logo to splash screen
