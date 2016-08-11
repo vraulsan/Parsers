@@ -12,16 +12,17 @@ def getHostname():
     while True:
         try:
             hostname = raw_input("Give me the hostname: ")
+            hostname = hostname.replace(' ', '')
         except ValueError:
             continue
         else:
             # if CPR/cpr is within hostname string, return
-            if ".10.1" in hostname or ".0.1" in hostname: 
+            if "CPR" in hostname or "cpr" in hostname: 
                 connectTo = 2                  # CPR's will use connectTo = 2
                 return hostname, connectTo
                 break
             # if BAP/bap is within hostname string, return
-            elif ".0.2" in hostname or ".0.2" in hostname:
+            elif "BAP" in hostname or "bap" in hostname:
                 connectTo = 1                  # BAP's will use connectTo = 1
                 return hostname, connectTo
                 break
@@ -34,11 +35,11 @@ def connectTelnet(hostname):
     timeout = 3
     connection = telnetlib.Telnet(hostname, port)
     # wait until we get prompt to Login
-    connection.read_until("Username:", timeout)
-    connection.write("panti\r\n")
+    connection.read_until("Login:", timeout)
+    connection.write("tso\r\n")
     # wait until we get prompt to Password
     connection.read_until("Password:", timeout)
-    connection.write("kornkid182\r\n")
+    connection.write("tso\r\n")
     print "Welcome to %s, type in your commands or \"exit\" at any time." % hostname
     return connection
 
@@ -109,18 +110,50 @@ def ONUorCommandorBack():
     else:
         return ONUorCommandorBack
 
-print "####################################################################"
-print "#                                                                  #"
-print "#                      SUMIBAP Ver 1.0 beta                        #"
-print "#                 (useful when doing Spectrum)                     #"
-print "#                                                                  #"
-print "#                  Developed by Victor Sanchez                     #"
-print "#                                                                  #"
-print "#                        for BHN ATS Team                          #"
-print "#                                                                  #"
-print "#            Press CTRL-C at any time to stop the script           #"
-print "####################################################################"
 
+
+###################################################################################
+###################################################################################
+
+logo = """
+
+                                                                
+                .,:;;;;:,.               .,;;;;;:,.                 
+           .:;;;:,.          ...,,...           .,;;;;,             
+        .:;;;,      .,:;;;;;;;;;;;;;;;;;;;;:,        ,;;;,          
+       :;;,     .:;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;,.     .:;;,        
+     .;;;.    :;;;;;;;;;;,               ,;;;;;;;;;,     .;;:       
+    .;;.    :;;;;;;;;,                       ,;;;;;;;:     :;;      
+   .;;.   :;;;;;;;.                             ,;;;;;;:.   ,;:     
+   ,;.  .:;;;;;:.       .:;;;;;;;;;;;;;:,         ,;;;;;;.   ,;,    
+   ;:   ;;;;;;.      .;;;;;;;;;;;;;;;;;;;;;,        ,;;;;;,   :,    
+   :  .;;;;;;      ,;;;;;;;;;;;;;;;;;;;;;;;;;,       .;;;;;,  .;    
+   .  :;;;;:      ;;;;;;;;:,         .:;;;;;;;;,       ;;;;;.  :    
+     .;;;;:     ,;;;;;;;.                ;;;;;;;:      .;;;;;       
+     ;;;;;.    .;;;;;;:                   .;;;;;;;      .;;;;.      
+     ;;;;:     ;;;;;;;    Sumibap_v1.py    .;;;;;;.      ;;;;:      
+    .;;;;,    ,;;;;;;                       ,;;;;;:      :;;;;      
+    ,;;;;.    ;;;;;;:      Developed by      ;;;;;;.     :;;;;.     
+    ,;;;;.    ;;;;;;:                        ;;;;;;.     :;;;;.     
+    .;;;;,    ,;;;;;:     Victor Sanchez    .;;;;;:      :;;;;      
+    .;;;;:    .;;;;;;:                      ;;;;;;.      :;;;;      
+     ;;;;;     ,;;;;;;,    for ATS Team    ;;;;;;;      .;;;;,      
+     .;;;;:     ,;;;;;;;.                :;;;;;;:.      :;;;;       
+   .  :;;;;:     .;;;;;;;;,.          ,:;;;;;;;:       :;;;;,  ,    
+   :  .;;;;;,      :;;;;;;;;;;;:::;;;;;;;;;;;:.       :;;;;:  .;    
+   ;,  .;;;;;;       .;;;;;;;;;;;;;;;;;;;;;:.       .;;;;;:   ::    
+   :;   .:;;;;;,        .;;;;;;;;;;;;;;;:          :;;;;;,   .;,    
+   .;;    :;;;;;;,           .,,,,,.             :;;;;;;.   .;:     
+    .;;    .:;;;;;;:.                         ,;;;;;;;.    .;;.     
+     .;;:     :;;;;;;;;:.                 .:;;;;;;;:.    .:;;       
+      .;;;,     .:;;;;;;;;;;;;:,,,,,:;;;;;;;;;;;;.      :;;:        
+        .:;;:.     .,:;;;;;;;;;;;;;;;;;;;;;;;,.      .;;;:.         
+           ,:;;:,.        ,,,::;;;;;::,,.        .:;;;:.            
+               .,::;;;:,.                .,,:;;;::,.                
+ """                                                                   
+ 
+
+print logo
 
 usern, passw = getSSHCredentials()
 
