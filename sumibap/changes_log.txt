@@ -1,4 +1,9 @@
 Version 1:
 
   . Sending blank spaces before/after/between hostname will not cause an issue.
-  . Added BHN logo to splash screen
+  . Added BHN logo to splash screen.
+
+Version 2:
+  . SSH and Telnet sessions will no longer re-connect every time a command is sent.
+  . Added 'find-vlan' command to Telnet session to more easily find customer's vlans.
+  
