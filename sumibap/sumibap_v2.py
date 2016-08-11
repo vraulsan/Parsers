@@ -99,7 +99,6 @@ def ONUorCommandorBack():
         onu = re.findall(r'\d+', ONUorCommandorBack)
         onu = "1/" + onu[0] + '/' + onu[1] + '/' + onu[2]
         onu = """
-        set cli pagination off\n
         show run epononu %s\n
         show onu %s\n
         show onu uniport %s\n""" % (onu, onu, onu)
@@ -167,7 +166,7 @@ while True:
             elif connect == 1:
                 break
             else:
-                connect.send("term length 0\n")
+                connect.send("set cli pagination off\n")
                 while True:
                     command = ONUorCommandorBack()
                     if command == 0:
@@ -180,11 +179,11 @@ while True:
             break
     elif connectTo == 1:
         telconn = connectTelnet(hostname)
-        telconn.write("terminal length 0\n")
         while True:
             telcomm = raw_input("Command to run or exit: ")
             if 'exi' in telcomm:
                 break
             else:
                 commandsTelnet(telconn, telcomm)
+
 
