@@ -33,20 +33,20 @@ def getHostname():
 def connectTelnet(hostname):
     try:
         port = 23
-        timeout = 3
-        connection = telnetlib.Telnet(hostname, port)
-        # wait until we get prompt to Login
-        connection.read_until("Login:", timeout)
-        connection.write("tso\r\n")
-        # wait until we get prompt to Password
-        connection.read_until("Password:", timeout)
-        connection.write("tso\r\n")
-        print "Welcome to %s, type in your commands or \"exit\" at any time." % hostname
-        return connection
+        timeout = 2
+        connection = telnetlib.Telnet(hostname, port, 2 )
     except:
         print "Unable to find that host... please try again"
         connection = 0
         return connection
+    # wait until we get prompt to Login
+    connection.read_until("Login:", timeout)
+    connection.write("tso\r\n")
+    # wait until we get prompt to Password
+    connection.read_until("Password:", timeout)
+    connection.write("tso\r\n")
+    print "Welcome to %s, type in your commands or \"exit\" at any time." % hostname
+    return connection    
 
 def commandsTelnet(connection, command):
     if 'loge' in command:
@@ -139,7 +139,7 @@ logo = """
    .  :;;;;:      ;;;;;;;;:,         .:;;;;;;;;,       ;;;;;.  :    
      .;;;;:     ,;;;;;;;.                ;;;;;;;:      .;;;;;       
      ;;;;;.    .;;;;;;:                   .;;;;;;;      .;;;;.      
-     ;;;;:     ;;;;;;;    Sumibap_v1.py    .;;;;;;.      ;;;;:      
+     ;;;;:     ;;;;;;;    Sumibap_v1.3    .;;;;;;.      ;;;;:      
     .;;;;,    ,;;;;;;                       ,;;;;;:      :;;;;      
     ,;;;;.    ;;;;;;:      Developed by      ;;;;;;.     :;;;;.     
     ,;;;;.    ;;;;;;:                        ;;;;;;.     :;;;;.     
@@ -184,7 +184,7 @@ while True:
                         break
                     else:
                         connect.send(command + '\n')
-                        time.sleep(0.5)
+                        time.sleep(1)
                         print connect.recv(65535)
             break
     elif connectTo == 1:
