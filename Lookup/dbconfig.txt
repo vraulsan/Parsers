@@ -1,4 +1,0 @@
-db_ip_or_hostname
-username
-password
-database_name
